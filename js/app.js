@@ -53,6 +53,7 @@ class UI {
       this.balance.classList.add("showBlack");
     }
   }
+
   //submit expense form
   submitExpenseForm() {
     const expenseValue = this.expenseInput.value;
@@ -86,7 +87,7 @@ class UI {
       this.showBalance();
     }
   }
-  //add expense
+
   addExpense(expense) {
     const div = document.createElement("div");
     div.classList.add("expense");
@@ -121,6 +122,41 @@ class UI {
     this.expenseAmount.textContent = total;
     return total;
   }
+
+  editExpense(element) {
+    //get the id of the item you wanna edit from the html data-id
+    let id = parseInt(element.dataset.id);
+    //hop on to the fourth parent element to edit
+    let parent = element.parentElement.parentElement.parentElement;
+    //remove from the DOM
+    this.expenseList.removeChild(parent);
+    let expense = this.itemList.filter(function(item) {
+      return item.id === id;
+    });
+    //show values
+    this.expenseInput.value = expense[0].title;
+    this.amountInput.value = expense[0].amount;
+    //remove from the list
+    let tempList = this.itemList.filter(function(item) {
+      return item.id !== id;
+    });
+    this.itemList = tempList;
+    this.showBalance();
+  }
+
+  deleteExpense(element) {
+    //get the id of the item you wanna delete from the html data-id
+    let id = parseInt(element.dataset.id);
+    //hop on to the fourth parent element to delete
+    let parent = element.parentElement.parentElement.parentElement;
+    //remove from the DOM
+    this.expenseList.removeChild(parent);
+    let tempList = this.itemList.filter(function(item) {
+      return item.id !== id;
+    });
+    this.itemList = tempList;
+    this.showBalance();
+  }
 }
 
 function eventListeners() {
@@ -144,7 +180,13 @@ function eventListeners() {
   });
 
   //expense click
-  expenseList.addEventListener("submit", function() {});
+  expenseList.addEventListener("click", function(event) {
+    if (event.target.parentElement.classList.contains("edit-icon")) {
+      ui.editExpense(event.target.parentElement);
+    } else if (event.target.parentElement.classList.contains("delete-icon")) {
+      ui.deleteExpense(event.target.parentElement);
+    }
+  });
 }
 
 document.addEventListener("DOMContentLoaded", function() {
