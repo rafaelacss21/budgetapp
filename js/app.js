@@ -15,4 +15,57 @@ class UI {
     this.itemList = [];
     this.itemID = 0;
   }
+  //submit budget method
+  submitBudgetForm() {
+    const value = this.budgetInput.value;
+    if (value === "") {
+      this.budgetFeedback.classList.add("showItem");
+      this.budgetFeedback.innerHTML = `<p>Budget input cannot be empty</p>`;
+      const self = this;
+      setTimeout(function() {
+        self.budgetFeedback.classList.remove("showItem");
+      }, 4000);
+    } else if (value < 0) {
+      this.budgetFeedback.classList.add("showItem");
+      this.budgetFeedback.innerHTML = `<p>Budget input cannot be less than zero</p>`;
+      const self = this;
+      setTimeout(function() {
+        self.budgetFeedback.classList.remove("showItem");
+      }, 4000);
+    } else {
+      this.budgetAmount.textContent = value;
+      this.budgetInput.value = "";
+      this.showBalance();
+    }
+  }
+  showBalance() {
+    console.log("hey im working");
+  }
 }
+
+function eventListeners() {
+  const budgetForm = document.getElementById("budget-form");
+  const expenseForm = document.getElementById("expense-form");
+  const expenseList = document.getElementById("expense-list");
+
+  //new instance of UI Class
+  const ui = new UI();
+
+  //budget form submit
+  budgetForm.addEventListener("submit", function(event) {
+    event.preventDefault();
+    ui.submitBudgetForm();
+  });
+
+  //expense form submit
+  expenseForm.addEventListener("submit", function(event) {
+    event.preventDefault();
+  });
+
+  //expense click
+  expenseList.addEventListener("submit", function() {});
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+  eventListeners();
+});
